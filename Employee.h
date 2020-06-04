@@ -1,9 +1,11 @@
 #ifndef STAFF_H
 #define STAFF_H
 #include <iostream>
+#include <vector>
+
 using namespace  std;
 class Employee{
-    //E:\luuTruSouceCode\codeCC++\EmployeeManager
+
 private:
     std::string _id;
     std::string _name;
@@ -38,12 +40,14 @@ public:
     ~Employee(){};
     // ham khac
 public:
-    virtual void enterEmployee();
-
+    int checkId(vector<Employee*> list , string id);
+    int checkDateOfBirth(string dateOfBirth);
+    virtual void enterEmployee(vector<Employee*> list);
     virtual void printEmployee();
-    virtual void inputFile();
-    void doc( ifstream & );
-    void ghi( ofstream & );
+    static void searchEmployee(string idSearch ,vector<Employee*> list);
+    void read( ifstream & );
+    void write( ofstream & );
+    void test();
 
 };
 

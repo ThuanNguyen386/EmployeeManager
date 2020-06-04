@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
     vector<Employee*> list;
-    ifstream ifs("C:\\Users\\khiem\\Desktop\\list.txt", ios::in);
+    ifstream ifs("C:\\Users\\BTC\\Desktop\\list.txt", ios::in);
     Employee *employee;
     int n;
     ifs >> n;
@@ -19,7 +19,7 @@ int main()
     ifs.getline(ss,3);// loai bo xuong dong
     for (int i=0 ; i < n ; i++){
         employee = new Employee();
-        employee->doc(ifs);
+        employee->read(ifs);
         list.push_back(employee);
     }
     ifs.close();
@@ -37,7 +37,7 @@ int main()
             string a="yes";
             while (a=="yes") {
                 employee = new Employee();
-                employee->enterEmployee();
+                employee->enterEmployee(list);
                 list.push_back(employee);
                 n = n + 1;
                 cout << "Ban muon nhap tiep khong ,an yes ; neu muon thoat an phim bat ky \n"<<endl;
@@ -45,17 +45,13 @@ int main()
             }
         }
 
+        else if(choice == 2){
+            string idSearch;
+            cout << "Nhap id nhan vien  =";
+            cin >> idSearch;
+            Employee::searchEmployee(idSearch,list );
 
-        else if(choice==2 )
-        {
-            if(list.size() == 0 ){
-                cout << "Danh sach khong co nhan vien nao";
-            }else{
-                for (int i = 0; i < list.size(); i++ ){
-                    list[i]->printEmployee();
 
-                }
-            }
         }
         else{
             break;
@@ -64,10 +60,10 @@ int main()
     }
 
     while (true);
-    ofstream ofs("C:\\Users\\khiem\\Desktop\\list.txt",ios::out);
+    ofstream ofs("C:\\Users\\BTC\\Desktop\\list.txt",ios::out);
     ofs << n << endl;
     for( int i = 0; i< n; i++ )
-        list[i]->ghi(ofs); // ghi thong tin cac sinh vien ra file OUTPUT.OUT
+        list[i]->write(ofs); // ghi thong tin cac nhan vien ra file OUTPUT.OUT
 
     ofs.close();
     ifs.close(); // dong file lai
