@@ -1,9 +1,9 @@
-#ifndef STAFF_H
-#define STAFF_H
+#ifndef EMPLOYEE_H
+#define EMPLOYEE_H
 #include <iostream>
 #include <vector>
 
-using namespace  std;
+using namespace std;
 class Employee{
 
 private:
@@ -40,15 +40,14 @@ public:
     ~Employee(){};
     // ham khac
 public:
-    int checkId(vector<Employee*> list , string id);
+    int checkId(vector<Employee*> list, string id);
     int checkDateOfBirth(string dateOfBirth);
     virtual void enterEmployee(vector<Employee*> list);
     virtual void printEmployee();
-    static void searchEmployee(string idSearch ,vector<Employee*> list);
-    void read( ifstream & );
-    void write( ofstream & );
-    void test();
+    static void searchEmployee(string idSearch, vector<Employee*> list);
+    void read(ifstream &);
+    void write(ofstream &);
 
 };
 
-#endif // STAFF_H
+#endif // EMPLOYEE_H
