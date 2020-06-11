@@ -1,7 +1,10 @@
 #include "Employee.h"
+#include "Helpper.h"
+
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <map>
 Employee::Employee(const std::string &id,
                    const std::string &name,
                    const std::string &dateOfBirth,
@@ -48,7 +51,8 @@ void Employee::setDepartment(const std::string &department){
     this->_department = department;
 }
 
-void Employee::enterEmployee(vector<Employee*> list){
+void Employee::enterEmployee(vector<Employee*> list ,string url){
+    fstream output(url, ios::app);;
     cout << "" << endl;
     cin.ignore();
     cout << "ID : ";
@@ -84,6 +88,9 @@ void Employee::enterEmployee(vector<Employee*> list){
         getline(cin, _department);
     }
 
+    output <<_id <<","<<_name<<","<<_dateOfBirth<<","<<_address<<","<<_department<<endl;
+
+    output.close();
     fflush(stdin);
 }
 
@@ -97,7 +104,7 @@ void Employee::printEmployee(){
     cout << "" <<endl;
 
 }
-void Employee::searchEmployee(string idSearch ,vector<Employee*> list){
+void Employee::searchEmployeeById(string idSearch ,vector<Employee*> list){
     for (int i = 0; i < list.size(); i++ ){
         if (list[i]->getId() == idSearch){
             list[i]->printEmployee();
@@ -110,31 +117,37 @@ void Employee::searchEmployee(string idSearch ,vector<Employee*> list){
 
 
 void Employee::read(ifstream &in){
-    char id[10], na[40], birth[20], ad[20], de[20];
+    char lines[500];
+    //    char id[10], na[40], birth[20], ad[20], de[20];
     fflush(stdin);
-    in.getline(id, 40);
-    in.getline(na, 40);
-    in.getline(birth, 20);
-    in.getline(ad, 20);
-    in.getline(de, 20);
+    in.getline(lines,500);
+
+    //    in.getline(id, 40);
+    //    in.getline(na, 40);
+    //    in.getline(birth, 20);
+    //    in.getline(ad, 20);
+    //    in.getline(de, 20);
+    string str = lines;
+    vector<string> v = Helpper::split (str, ',');
 
 
-    this->setId(id);
-    this->setName(na);
-    this->setDateOfBirth(birth);
-    this->setAddress(ad);
-    this->setDepartment(de);
+    this->setId(v.at(0));
+    this->setName(v.at(1));
+    this->setDateOfBirth(v.at(2));
+    this->setAddress(v.at(3));
+    this->setDepartment(v.at(4));
 
 }
 void Employee::write(ofstream &ofs){
     ofs	<< this->getId() << endl
         << this->getName() << endl
         <<  this->getDateOfBirth() << endl
-        <<  this->getAddress() << endl
-        <<  this->getDepartment() << endl;
+         <<  this->getAddress() << endl
+          <<  this->getDepartment() << endl;
 
 }
-int Employee:: checkId(vector<Employee*> list, string id){;
+int Employee:: checkId(vector<Employee*> list, string id)
+{;
     for (int i = 0; i < list.size(); i++ ){
         if (list[i]->getId()==id){
             return 0;
@@ -165,7 +178,7 @@ int Employee:: checkDateOfBirth(string dateOfBirth){
         } else {
             switch (stoi(birth[1], 0, 10))
             {
-                case 2:
+            case 2:
                 if (stoi(birth[0], 0, 10) > 29) {
                     return 0;
                 }
@@ -178,7 +191,7 @@ int Employee:: checkDateOfBirth(string dateOfBirth){
                 return 1;
                 break;
 
-                case 4: case 6: case 9: case 11:
+            case 4: case 6: case 9: case 11:
                 if (stoi(birth[0], 0, 10) > 30) {
                     return 0;
                 }

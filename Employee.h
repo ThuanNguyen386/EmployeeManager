@@ -42,9 +42,10 @@ public:
 public:
     int checkId(vector<Employee*> list, string id);
     int checkDateOfBirth(string dateOfBirth);
-    virtual void enterEmployee(vector<Employee*> list);
+    virtual void enterEmployee(vector<Employee*> list,string url);
     virtual void printEmployee();
-    static void searchEmployee(string idSearch, vector<Employee*> list);
+    static void searchEmployeeById(string idSearch, vector<Employee*> list);
+
     void read(ifstream &);
     void write(ofstream &);
 
