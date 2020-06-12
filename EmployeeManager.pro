@@ -6,11 +6,13 @@ CONFIG -= qt
 SOURCES += \
         Employee.cpp \
         Helpper.cpp \
+        StatusDate.cpp \
         main.cpp
 
 HEADERS += \
     Employee.h \
-    Helpper.h
+    Helpper.h \
+    Helpper.h \
+    StatusDate.h
 
-DISTFILES += \
-    ImportData.csv
+DISTFILES +=

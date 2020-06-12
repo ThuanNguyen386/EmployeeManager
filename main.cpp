@@ -4,6 +4,12 @@
 #include <vector>
 #include <Employee.h>
 #include <Helpper.h>
+#include <iostream>
+#include <cstring>
+
+
+#include <StatusDate.h>
+
 
 using namespace std;
 
@@ -21,16 +27,19 @@ int main()
     string abc;
     n=Helpper ::numberLine(); // lấy ra số dòng
     n=n-1;
-    cout<<n<<endl;
     ifs >> abc;
     char ss[5];
     ifs.getline(ss, 3);// loai bo xuong dong
 
 
 // dùng vì cần checkid // đọc ra tất cả
+    int line=1 ;
+    int *linePtr=&line;
+
+
     for (int i=0 ; i < n ; i++){
         employee = new Employee();
-        employee->read(ifs);
+        employee->read(ifs ,list ,linePtr);
         list.push_back(employee);
     }
 
@@ -46,11 +55,13 @@ int main()
         cout << "Chon chuc nang (1-2 hoac khac):" << endl;
         cout << "Moi ban nhap lai lua chon = ";
         cin >> choice;
+
         if (choice == 1) {
             string a = "yes";
             while (a == "yes") {
                 employee = new Employee();
                 employee->enterEmployee(list,"..\\EmployeeManager\\ImportData.csv");
+                list.push_back(employee);
 
 
                 cout << "Ban muon nhap tiep khong, an yes; neu muon thoat an phim bat ky \n" << endl;
@@ -60,37 +71,8 @@ int main()
 
         else if(choice == 2){
 
-            cout <<"===========================================" << endl;
-            cout <<"= 1-search By Name                      =" << endl;
-            cout <<"= 2-search By Id                =" << endl;
-            cout <<"= 3-search By Address               =" << endl;
-            cout <<"= 3-search By Department               =" << endl;
-            cout <<"= 4-search By DateOfBirth               =" << endl;
 
-
-
-            cout <<"= Chon khac de thoat                      =" << endl;
-            cout <<"===========================================" << endl;
-
-            cout << "Moi ban nhap lai lua chon = ";
-            cin >> choiceSearch; // chọn các lựa chọn trong tìm kiếm
-            if (choiceSearch ==1 ) {
-                string idSearch;
-                cout << "Nhap id nhan vien = ";
-                cin >> idSearch;
-                Employee::searchEmployeeById(idSearch,list);
-            }
-            else if (choiceSearch == 2) {
-
-            }
-            else if (choiceSearch == 3) {
-
-            } else if (choiceSearch == 4) {
-
-            }
-
-
-
+        employee->searchEmployee(list);
 
         }
         else if (choice ==3){
@@ -105,6 +87,18 @@ int main()
                 }
             }
         }
+
+        else if (choice ==4) { // tạo tất cả các file nhân viên chỉ lần đầu muốn
+            for (int i=0 ; i < list.size(); i++) {
+                std::ofstream o( "..\\EmployeeManager\\fileNV\\"+list.at(i)->getId()+".csv");
+            }
+
+        }
+        else if(choice ==5){ // lưu thông tin điểm danh
+            // nhập vào id , nhập vào ngày muốn điểm danh ,nhập vào trạng thái muốn điểm danh
+            StatusDate::read(list);
+
+        }
         else{
             break;
         }
@@ -112,17 +106,6 @@ int main()
     }
 
     while (true);
-
-    //    ofstream ofs("C:\\Users\\BTC\\Desktop\\ImportData.csv", ios::out);
-
-    //    for( int i = 0; i< n; i++ )
-    //        list[i]->write(ofs); // ghi thong tin cac nhan vien ra file OUTPUT.OUT
-
-    //  ofs.close();
-
-
-
-
 
     ifs.close(); // đóng đọc file
     return 0;

@@ -5,6 +5,9 @@
 #include <sstream>
 #include <fstream>
 #include <map>
+#include <algorithm>
+
+
 Employee::Employee(const std::string &id,
                    const std::string &name,
                    const std::string &dateOfBirth,
@@ -57,7 +60,7 @@ void Employee::enterEmployee(vector<Employee*> list ,string url){
     cin.ignore();
     cout << "ID : ";
     getline(cin,_id);
-    while (checkId(list, _id) == 0) {
+    while (Helpper::checkId(list, _id) == 0) {
         cout << "trung id, xin nhap lai:  " << endl;
         getline(cin, _id);
 
@@ -67,7 +70,7 @@ void Employee::enterEmployee(vector<Employee*> list ,string url){
     getline(cin, _name);
     cout << "Ngay Sinh Nhan Vien: ";
     getline(cin, _dateOfBirth);
-    while (checkDateOfBirth(_dateOfBirth) == 0) {
+    while (Helpper::checkDateOfBirth(_dateOfBirth) == 0) {
         cout << "Ngay thang nam sinh khong hop le, vui long nhap lai:" << endl;
         getline(cin, _dateOfBirth);
     }
@@ -102,25 +105,19 @@ void Employee::printEmployee(){
     cout << "Dia Chi Nhan Vien: " << _address << endl;
     cout << "Phong Ban Nhan Vien: " << _department << endl;
     cout << "" <<endl;
-
-}
-void Employee::searchEmployeeById(string idSearch ,vector<Employee*> list){
-    for (int i = 0; i < list.size(); i++ ){
-        if (list[i]->getId() == idSearch){
-            list[i]->printEmployee();
-            return;
-        }
-    }
-    cout << "Khong co nhan vien co id = "<< idSearch << endl;
+    //cout << _id <<"   "<<_name<<"   "<<_dateOfBirth<<"   "<<_address<<"   "<<_department << endl;
 
 }
 
 
-void Employee::read(ifstream &in){
+
+void Employee::read(ifstream &in ,vector<Employee*> list ,int *linePtr){
     char lines[500];
     //    char id[10], na[40], birth[20], ad[20], de[20];
     fflush(stdin);
     in.getline(lines,500);
+    *linePtr=*linePtr+1;
+
 
     //    in.getline(id, 40);
     //    in.getline(na, 40);
@@ -130,6 +127,19 @@ void Employee::read(ifstream &in){
     string str = lines;
     vector<string> v = Helpper::split (str, ',');
 
+    if(   Helpper::checkId(list ,v.at(0))  ==0){
+        //cout<< "id bi trung o dong thu "<<*line <<endl;
+         cout<<"bi trung id o dong thu "<<*linePtr <<endl;
+
+        return; // nếu bị trùng không lưu vào list nữa
+    }
+
+    if(   Helpper::checkDateOfBirth(v.at(2))  ==0){
+
+         cout<<"Ngay sinh khong phu hop "<<*linePtr <<endl;
+
+        return; // nếu bị trùng không lưu vào list nữa
+    }
 
     this->setId(v.at(0));
     this->setName(v.at(1));
@@ -146,59 +156,128 @@ void Employee::write(ofstream &ofs){
           <<  this->getDepartment() << endl;
 
 }
-int Employee:: checkId(vector<Employee*> list, string id)
-{;
-    for (int i = 0; i < list.size(); i++ ){
-        if (list[i]->getId()==id){
-            return 0;
-        }
-    }
-    return 1;
-}
 
-int Employee:: checkDateOfBirth(string dateOfBirth){
-    for (int i = 0; i < dateOfBirth.length(); i++) {
-        if ((dateOfBirth[i] < 47) || (dateOfBirth[i] > 57)) {
-            return 0;
-        }
-    }
-    vector<string> birth;
-    while(!dateOfBirth.empty()){
-        birth.push_back(dateOfBirth.substr(0, dateOfBirth.find("/")));
-        if (dateOfBirth.find("/") > dateOfBirth.size()) {
+
+void Employee::searchEmployee(vector<Employee*> list){
+    // map<string,Employee> list =  Staff::addMapStaff(urlFile);
+    // vector<Employee*>::iterator itr;
+
+
+    int choice;
+
+
+    do {
+        cout << ""<< endl;
+        cout <<"------- MENU SEARCH-------" <<endl;
+        cout <<"1-Tim kiem theo ID           -" <<endl ;
+        cout <<"2-Tim kiem theo Name         -" <<endl;
+        cout <<"3-Tim kiem theo Address      -"<<endl ;
+        cout <<"4-Tim kiem theo Department   -"<<endl ;
+        cout <<"0-Thoat   -"<<endl ;
+        cout <<"--------------------------" <<endl;
+        cout << " Nhap lua chon cua ban :  " ;
+        cin >> choice;
+        switch (choice) {
+        case 1:
+        {
+
+            string idSearch;
+            cout << "=> Tim kiem theo ID  " <<endl;
+            cout << "Nhap id:= " ;
+            cin >> idSearch;
+            int check = 0;
+            for (int i = 0; i < list.size(); i++ ){
+                if (list[i]->getId() == idSearch){
+                    list[i]->printEmployee();
+                    check = 1;
+                }
+            }
+
+            if(check == 0){
+
+                cout << "Khong co nhan vien co id = "<< idSearch << endl;
+
+            }
             break;
         }
-        dateOfBirth.erase(0, dateOfBirth.find("/") + 1);
-    }
-    if (birth.size() != 3) {
-        return 0;
-    } else {
-        if ((stoi(birth[0], 0, 10) > 31) || (stoi(birth[1], 0, 10) > 12)) {
-            return 0;
-        } else {
-            switch (stoi(birth[1], 0, 10))
-            {
-            case 2:
-                if (stoi(birth[0], 0, 10) > 29) {
-                    return 0;
+        case 2:
+        {
+            cout << "=> Tim kiem theo NAME" << endl;
+            cin.ignore();
+            string name;
+            cout << "nhap ten:= ";
+            getline(cin,name);
+            int check = 0;
+            for (int i = 0; i < list.size(); i++ ){
+                if(Helpper::isSubstring(name,list[i]->getName()) >= 0){
+                    list[i]->printEmployee();
+                    check = 1;
                 }
-                if (stoi(birth[0], 0, 10) == 29){
-                    if((stoi(birth[2], 0, 10) % 400 == 0) || ((stoi(birth[2], 0, 10) % 4 == 0) && (stoi(birth[2], 0, 10) % 100 != 0))) {
-                        return 1;
-                    }
-                    return 0;
-                }
-                return 1;
-                break;
-
-            case 4: case 6: case 9: case 11:
-                if (stoi(birth[0], 0, 10) > 30) {
-                    return 0;
-                }
-                return 1;
-                break;
             }
+            if(check == 0){
+
+                cout << "Khong co nhan vien co name = "<< name << endl;
+
+            }
+            fflush(stdin);
+            break;
         }
-    }
-    return 1;
+
+        case 3:
+        {
+
+            cout << "=> Tim kiem theo Adress" << endl;
+            cin.ignore();
+            string address;
+            cout << "nhap dia chi := ";
+            getline(cin,address);
+            int check = 0;
+            cout << "----= danh sach dia chi = "<<address <<"=----" <<endl;
+            for (int i = 0; i < list.size(); i++ ){
+                if(Helpper::isSubstring(address,list[i]->getAddress()) >= 0){
+                    list[i]->printEmployee();
+                    check = 1;
+                }
+            }
+            if(check == 0){
+
+                cout << "Khong co nhan vien co dia chi = "<< address << endl;
+
+            }
+            fflush(stdin);
+            break;
+        }
+
+        case 4:
+        {
+            cout << "=> Tim kiem theo Department" <<endl;
+            cin.ignore();
+            string department;
+
+            cout << "Nhap phong ban:= ";
+            getline(cin,department);
+            cout << department <<"-------------";
+            int check = 0;
+            for (int i = 0; i < list.size(); i++ ){
+                if(Helpper::isSubstring(department,list[i]->getDepartment()) >= 0){
+                    list[i]->printEmployee();
+                    check = 1;
+                }
+            }
+            if(check == 0){
+                cout << "Khong co nhan vien co phong ban = "<< department<< endl;
+
+            }
+            fflush(stdin);
+            break;
+        }
+        }
+
+    } while (choice != 0);
+
+
+
+    fflush(stdin);
+    cout << "\n-----=======================-----" <<endl;
+
 }
