@@ -14,16 +14,30 @@ void StatusDate ::read(vector<Employee*> list){
 
 
     // mo file csv nhan viên điểm danh
-    ifstream ifs("..\\EmployeeManager\\fileNV\\"+idNV+".csv", ios::in);
+    ifstream ifs("C:\\Users\\khiem\\Desktop\\fileNV\\"+idNV+".csv", ios::in);
+
+
+    // mở đọc file để check xem có ngày trùng không nếu trùng thì thay đổi trạng thái điểm danh thôi
+//    int n=Helpper ::numberLine(); // lấy ra số dòng
+//    for (int i=0 ; i < n ; i++){
+//        char lines[500];
+//        fflush(stdin);
+//        ifs.getline(lines,500);
+//        string str = lines;
+//        vector<string> v = Helpper::split (str, ',');
+
+//    }
+
+
+
 
     cout<< "nhap ngay nhan vien muon diem danh" <<endl;
     string date;
     cin >> date;
     while (Helpper::checkDateOfBirth(date) == 0) {
-        cout << "Ngay khong hop le, vui long nhap lai:" << endl;
+        cout << "Ngay thang nam sinh khong hop le, vui long nhap lai:" << endl;
         cin>> date;
     }
-
 
     cout<< "nhap trang thai nhan vien muon diem danh" <<endl;
     string status;
@@ -36,7 +50,7 @@ void StatusDate ::read(vector<Employee*> list){
 
 
     // ghi vào
-    fstream output("..\\EmployeeManager\\fileNV\\"+idNV+".csv", ios::app);
+    fstream output("C:\\Users\\khiem\\Desktop\\fileNV\\"+idNV+".csv", ios::app);
     output << date<<","<<status<<endl;
 
     // đóng đọc file

@@ -12,7 +12,7 @@ int Helpper :: numberLine(){ // hàm đếm số dòng trong file
     char c;
     int numchars, numlines;
 
-    f1.open("..\\EmployeeManager\\ImportData.csv");
+    f1.open("C:\\Users\\khiem\\Desktop\\ImportData.csv");
 
     numchars = 0;
     numlines = 0;
@@ -120,7 +120,6 @@ int Helpper ::checkStatus(string status){ // hop le return 1 , khong hop le retu
     }
     return 0;
 }
-
 
 
 

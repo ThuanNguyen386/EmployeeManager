@@ -22,7 +22,7 @@ int main()
     Employee *employee;
 
     // phần này chỉ lấy ra số dòng trong file csv và xuống khỏi dòng đầu tiên
-    ifstream ifs("..\\EmployeeManager\\ImportData.csv", ios::in);
+    ifstream ifs("C:\\Users\\khiem\\Desktop\\ImportData.csv", ios::in);
     int n;
     string abc;
     n=Helpper ::numberLine(); // lấy ra số dòng
@@ -60,7 +60,7 @@ int main()
             string a = "yes";
             while (a == "yes") {
                 employee = new Employee();
-                employee->enterEmployee(list,"..\\EmployeeManager\\ImportData.csv");
+                employee->enterEmployee(list,"C:\\Users\\khiem\\Desktop\\ImportData.csv");
                 list.push_back(employee);
 
 
@@ -90,7 +90,7 @@ int main()
 
         else if (choice ==4) { // tạo tất cả các file nhân viên chỉ lần đầu muốn
             for (int i=0 ; i < list.size(); i++) {
-                std::ofstream o( "..\\EmployeeManager\\fileNV\\"+list.at(i)->getId()+".csv");
+                std::ofstream o( "C:\\Users\\khiem\\Desktop\\fileNV\\"+list.at(i)->getId()+".csv");
             }
 
         }
