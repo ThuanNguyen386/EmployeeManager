@@ -3,6 +3,7 @@
 #include <iostream>
 #include<vector>
 #include<Employee.h>
+#include<map>
 using namespace std;
 class StatusDate{
 private:
@@ -11,9 +12,9 @@ private:
 
 private:
     StatusDate(
-               const std::string &date,
-               const std::string &status
-               );
+            const std::string &date,
+            const std::string &status
+            );
 
 public:
 
@@ -23,7 +24,15 @@ public:
     const std::string &getDate() const;
     const std::string &getStatus() const;
 
-    static void read(vector<Employee*> list);
+
+    // đọc dữ liệu điểm danh của từng nhân viên
+    // hàm thêm trạng thái nhân viên theo ngày
+    // nếu ngày nhập vào trùng có thể sửa hoặc không
+    static void addOrUpdateStatus(vector<Employee*> list);
+    static void addOrUpdateStatus1(map <std ::string ,std ::string> mapRollCall ,string idNV);
+
+
+    static void writeRollCall(map<string,string> mapRollCall ,string idNV);
 
 };
 

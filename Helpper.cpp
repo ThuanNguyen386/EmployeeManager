@@ -5,14 +5,17 @@
 #include <sstream>
 #include <algorithm>
 
+
 using namespace std;
 
-int Helpper :: numberLine(){ // hàm đếm số dòng trong file
+int Helpper :: numberLine(string path){ // hàm đếm số dòng trong file
     ifstream f1;
     char c;
     int numchars, numlines;
 
-    f1.open("C:\\Users\\khiem\\Desktop\\ImportData.csv");
+    //f1.open("C:\\Users\\TCC\\Desktop\\ImportData.csv");
+    f1.open(path);
+
 
     numchars = 0;
     numlines = 0;
