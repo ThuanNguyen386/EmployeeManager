@@ -1,11 +1,14 @@
 #include "Employee.h"
 #include "Helpper.h"
+#include "RollCallHistory.h"
+
 
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <map>
 #include <algorithm>
+using namespace std;
 
 
 Employee::Employee(const std::string &id,
@@ -55,7 +58,7 @@ void Employee::setDepartment(const std::string &department){
 }
 
 void Employee::enterEmployee(vector<Employee*> list ,string url){
-    fstream output(url, ios::app);;
+    fstream output(url, ios::app);
     cout << "" << endl;
     cin.ignore();
     cout << "ID : ";
@@ -63,9 +66,9 @@ void Employee::enterEmployee(vector<Employee*> list ,string url){
     while (Helpper::checkId(list, _id) == 0) {
         cout << "trung id, xin nhap lai:  " << endl;
         getline(cin, _id);
-
-
     }
+    std::ofstream o( "C:\\Users\\khiem\\Desktop\\fileNV\\"+_id+".csv");
+
     cout << "Ten Nhan Vien: ";
     getline(cin, _name);
     cout << "Ngay Sinh Nhan Vien: ";
@@ -105,42 +108,17 @@ void Employee::printEmployee(){
     cout << "Dia Chi Nhan Vien: " << _address << endl;
     cout << "Phong Ban Nhan Vien: " << _department << endl;
     cout << "" <<endl;
+    // in ra lịch sử điểm dan
     //cout << _id <<"   "<<_name<<"   "<<_dateOfBirth<<"   "<<_address<<"   "<<_department << endl;
 
 }
 
-
-
-void Employee::read(ifstream &in ,vector<Employee*> list ,int *linePtr){
+void Employee ::readData(ifstream &in ,vector<Employee*> list){
     char lines[500];
-    //    char id[10], na[40], birth[20], ad[20], de[20];
     fflush(stdin);
     in.getline(lines,500);
-    *linePtr=*linePtr+1;
-
-
-    //    in.getline(id, 40);
-    //    in.getline(na, 40);
-    //    in.getline(birth, 20);
-    //    in.getline(ad, 20);
-    //    in.getline(de, 20);
     string str = lines;
     vector<string> v = Helpper::split (str, ',');
-
-    if(   Helpper::checkId(list ,v.at(0))  ==0){
-        //cout<< "id bi trung o dong thu "<<*line <<endl;
-         cout<<"bi trung id o dong thu "<<*linePtr <<endl;
-
-        return; // nếu bị trùng không lưu vào list nữa
-    }
-
-    if(   Helpper::checkDateOfBirth(v.at(2))  ==0){
-
-         cout<<"Ngay sinh khong phu hop "<<*linePtr <<endl;
-
-        return; // nếu bị trùng không lưu vào list nữa
-    }
-
     this->setId(v.at(0));
     this->setName(v.at(1));
     this->setDateOfBirth(v.at(2));
@@ -148,12 +126,55 @@ void Employee::read(ifstream &in ,vector<Employee*> list ,int *linePtr){
     this->setDepartment(v.at(4));
 
 }
+
+
+
+void Employee::readImport(ifstream &in ,vector<Employee*> list ,int *linePtr){
+
+
+    char lines[500];
+    fflush(stdin);
+    in.getline(lines,500);
+    *linePtr=*linePtr+1;
+    string str = lines;
+    vector<string> v = Helpper::split (str, ',');
+
+    if(   Helpper::checkId(list ,v.at(0))  ==0){
+        //cout<< "id bi trung o dong thu "<<*line <<endl;
+        cout<<"bi trung id o dong thu "<<*linePtr <<endl;
+
+        return; // nếu bị trùng không lưu vào list nữa
+    }
+
+    if(   Helpper::checkDateOfBirth(v.at(2))  ==0){
+
+        cout<<"Ngay sinh khong phu hop "<<*linePtr <<endl;
+
+        return; // nếu bị trùng không lưu vào list nữa
+    }
+    std::ofstream o( "C:\\Users\\khiem\\Desktop\\fileNV\\"+v.at(0)+".csv");
+
+
+    this->setId(v.at(0));
+    this->setName(v.at(1));
+    this->setDateOfBirth(v.at(2));
+    this->setAddress(v.at(3));
+    this->setDepartment(v.at(4));
+
+    fstream output("C:\\Users\\khiem\\Desktop\\Data.csv", ios::app);
+    output <<_id <<","<<_name<<","<<_dateOfBirth<<","<<_address<<","<<_department<<endl;
+    output.close();
+
+
+
+}
 void Employee::write(ofstream &ofs){
-    ofs	<< this->getId() << endl
-        << this->getName() << endl
-        <<  this->getDateOfBirth() << endl
-         <<  this->getAddress() << endl
-          <<  this->getDepartment() << endl;
+    ofs
+            << this->getId() << endl
+            << this->getName() << endl
+            <<  this->getDateOfBirth() << endl
+             <<  this->getAddress() << endl
+              <<  this->getDepartment() << endl;
 
 }
 
@@ -281,3 +302,4 @@ void Employee::searchEmployee(vector<Employee*> list){
     cout << "\n-----=======================-----" <<endl;
 
 }
+

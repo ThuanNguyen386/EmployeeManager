@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
         Employee.cpp \
         Helpper.cpp \
+        RollCallHistory.cpp \
         StatusDate.cpp \
         main.cpp
 
@@ -13,6 +14,7 @@ HEADERS += \
     Employee.h \
     Helpper.h \
     Helpper.h \
+    RollCallHistory.h \
     StatusDate.h
 
 DISTFILES +=
